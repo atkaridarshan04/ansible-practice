@@ -1,0 +1,23 @@
+services:
+  node1:
+    build: .
+    container_name: ansible_node_1
+    restart: unless-stopped
+    networks:
+      ansible_net:
+        ipv4_address: 172.20.0.11
+
+  node2:
+    build: .
+    container_name: ansible_node_2
+    restart: unless-stopped
+    networks:
+      ansible_net:
+        ipv4_address: 172.20.0.12
+
+networks:
+  ansible_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24

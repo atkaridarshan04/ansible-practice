@@ -1,0 +1,11 @@
+- name: Hello Playbook
+  hosts: servers
+  become: false # running as non-root user
+
+  vars:
+    app: demo-app
+    version: v1
+
+  tasks:
+    - name: Demo App printing
+      ansible.builtin.command: echo "Prinnting {{ version }} of {{ app }}"

@@ -1,0 +1,38 @@
+- name: Install and Run Nginx
+  hosts: servers
+  become: true
+
+  vars:
+    packages_to_install:
+      - curl
+      - nginx
+      - systemctl
+
+  tasks:
+    - name: Install Nginx and utilis
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ packages_to_install }}"
+      when: ansible_facts["distribution"] == "Ubuntu"
+      register: apt_output
+
+    - name: Print the complete apt module output
+      ansible.builtin.debug:
+        var: apt_output
+
+    - name: Copy index.html to nginx root
+      ansible.builtin.copy:
+        src: index.html
+        dest: /var/www/html
+        mode: '0644'
+
+    - name: Enable and Start Nginx
+      ansible.builtin.systemd_service:
+        state: started
+        enabled: true
+        name: nginx
+
+    - name: Test Nginx Connection
+      ansible.builtin.uri:
+        url: http://localhost
