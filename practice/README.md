@@ -80,3 +80,18 @@ Correct Command
 ```bash
 ansible-playbook -i inventory.ini ./vault/secrets-playbook.yml --vault-password-file ./vault/vault_password.txt
 ```
+
+
+---
+## Ansible Roles
+
+Create Role
+```bash
+ansible-galaxy init roles/docker
+```
+Then we add the tasks, vars, handlers etc
+
+Run Ansible role using playbook
+```bash
+ansible-playbook -i inventory.ini docker-role-playbook.yml
+```

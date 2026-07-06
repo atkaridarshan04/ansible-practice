@@ -1,0 +1,39 @@
+# SPDX-License-Identifier: MIT-0
+---
+# tasks file for roles/docker
+
+- name: Update apt cache and upgrade all packages
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: dist
+  become: true
+
+- name: Install the package "Docker"
+  ansible.builtin.apt:
+    name: docker.io
+    state: present
+  become: true
+
+# - name: Start and Enable Docker Service
+#   ansible.builtin.systemd_service:
+#     name: docker
+#     state: started
+#     enabled: true
+#   become: true
+
+- name: Add the user to Docker Group
+  ansible.builtin.user:
+    name: "{{ item }}"
+    groups: docker
+    append: true
+  loop: "{{ docker_users }}"
+  become: true
+
+- name: Register Docker version
+  ansible.builtin.command: docker --version
+  register: docker_version
+  changed_when: false
+
+- name: Show Docker version
+  ansible.builtin.debug:
+    msg: "{{ docker_version.stdout }}"

@@ -1,0 +1,5 @@
+- name: Run Docker Role
+  hosts: servers
+  become: true
+  roles:
+    - docker
